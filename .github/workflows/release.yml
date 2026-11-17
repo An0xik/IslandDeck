@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish
+        run: dotnet publish IslandDeck.csproj -c Release -r win-x64 --self-contained true -p:Version=1.0.${{ github.run_number }} -o publish
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y --no-progress
+
+      - name: Build installer
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /DAppVersion=1.0.${{ github.run_number }} installer.iss
+
+      - name: Zip
+        run: Compress-Archive -Path publish\* -DestinationPath IslandDeck.zip
+
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create v1.0.${{ github.run_number }} IslandDeck.zip output\IslandDeck-Setup.exe --title "IslandDeck 1.0.${{ github.run_number }}" --generate-notes
