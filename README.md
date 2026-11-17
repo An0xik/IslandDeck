@@ -1,47 +1,68 @@
 # IslandDeck
 
-Vlastná aplikácia pre Windows 10/11 inšpirovaná videom o NotchPixel. Obsahuje:
+IslandDeck is a small desktop customization app for Windows 10 and 11. It runs in the background
+and is controlled from a tray icon.
 
-- **Ostrov** (pilulka hore uprostred obrazovky) – po nabehnutí myšou sa rozbalí: skladba z Spotify/prehliadača
-  s tlačidlami prev / play / next, hodiny a batéria.
-- **Sklenený panel úloh** – priehľadný / acrylic panel úloh (efekt sa obnovuje časovačom).
-- **Živá tapeta** – ľubovoľné video (mp4, wmv…) beží za ikonami plochy.
-- **Widget** – veľké denné hodiny s dátumom, dá sa presúvať myšou.
-- **Updater** – aplikácia si sama stiahne novú verziu z GitHub Releases.
-- Ikona v oznamovacej oblasti (tray) s ovládaním všetkého; nastavenia sa ukladajú do `%AppData%\IslandDeck\settings.json`.
+## Features
 
-## Inštalátor a aktualizácie cez GitHub (jednorazové nastavenie)
+- **Island** – a compact black pill at the top center of the screen. Hover over it to expand it:
+  now-playing track (Spotify, browsers and other players) with previous / play / next buttons,
+  clock and battery status.
+- **Glass taskbar** – a translucent, blurred taskbar.
+- **Live wallpaper** – play any video (mp4, wmv, avi, mov, mkv) behind your desktop icons.
+- **Clock widget** – a large clock and date on the desktop that you can drag around.
+- **Built-in updater** – checks GitHub Releases and updates the app with one click.
 
-Inštalátor `IslandDeck-Setup.exe` zostavuje GitHub automaticky. Na tvojom počítači nemusíš mať nainštalované nič ďalšie.
+> The app's own menus and labels are currently in Slovak.
 
-1. Vytvor si bezplatný účet na github.com a **verejný** repozitár (napr. `IslandDeck`).
-2. Nahraj doň **obsah** priečinka `IslandDeck` vrátane skrytého priečinka `.github`
-   (Add file → Upload files, potom označ všetko a pretiahni). Súbory musia byť priamo v koreni repozitára.
-3. Otvor kartu **Actions**. Zostavenie trvá niekoľko minút. Po skončení sa vpravo na hlavnej stránke objaví
-   **Releases** s verziou `1.0.<číslo behu>`.
-4. Stiahni z Releases **IslandDeck-Setup.exe** a spusti ho. Inštaluje sa len pre tvoj účet, bez správcu.
-   Inštalátor ponúkne spúšťanie so systémom Windows a odkaz na ploche.
-5. V aplikácii: ikona pri hodinách → **Repozitár aktualizácií…** → napíš `tvoje-meno/IslandDeck`.
-6. Ikona → **Skontrolovať aktualizácie**. Aplikácia sa po potvrdení sama aktualizuje a reštartuje.
-   Ak je zapnuté „Kontrolovať pri spustení“, kontroluje aj pri každom štarte.
+## Install
 
-Každá ďalšia zmena nahraná do repozitára (vetva `main`) vytvorí novú verziu a updater ju ponúkne.
+1. Open the **Releases** page of this repository.
+2. Download **IslandDeck-Setup.exe** from the latest release and run it.
+3. Choose whether to start IslandDeck with Windows and whether to create a desktop shortcut.
 
-## Lokálne zostavenie (voliteľné, pre vývojárov)
+The installer installs for the current user only and does not need administrator rights.
+Nothing else has to be installed first.
 
-Potrebuješ [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0):
+Windows SmartScreen may warn that the app is unsigned the first time you run the installer.
+Click **More info**, then **Run anyway**.
 
-```
-dotnet publish -c Release -r win-x64 --self-contained true -o publish
-```
+## Using the app
 
-Updater funguje pri nainštalovanej aplikácii, nie cez `dotnet run`.
+Right-click the IslandDeck icon in the notification area (next to the clock; it may be behind the `^` arrow).
 
-## Poznámky
+| Menu item | What it does |
+| --- | --- |
+| Island | Show or hide the island |
+| Glass taskbar | Turn the translucent taskbar on or off |
+| Clock widget | Show or hide the desktop clock |
+| Choose wallpaper video… | Pick a video to use as the live wallpaper |
+| Stop live wallpaper | Remove the live wallpaper |
+| Check for updates | Look for a newer version and install it |
+| Update repository… | Set the GitHub repository to update from, as `owner/repo` |
+| Check on startup | Check for updates every time the app starts |
+| Exit | Quit the app and restore the taskbar |
 
-- Panel úloh sa pri ukončení aplikácie vráti do normálu; ak by nie, reštartuj Prieskumníka.
-- Živá tapeta používa MediaElement (WPF). Pre najlepší výkon použi H.264 mp4.
-- Prehrávanie médií číta systémové Windows media sessions, takže funguje s väčšinou prehrávačov.
-- Windows SmartScreen môže pri prvom spustení inštalátora upozorniť, že aplikácia nie je podpísaná.
-  Vyber „Ďalšie informácie“ a „Aj tak spustiť“.
-- Ide o pôvodný kód; názov, vzhľad ani ikony nekopírujú NotchPixel.
+Settings are saved in `%AppData%\IslandDeck\settings.json`.
+
+## Updates
+
+The updater downloads the newest release from the GitHub repository set under **Update repository…**
+and replaces the installed files. The app restarts by itself afterwards.
+
+Every push to the `main` branch of the repository builds a new release automatically
+(see `.github/workflows/release.yml`). Each release contains:
+
+- `IslandDeck-Setup.exe` – the installer
+- `IslandDeck.zip` – the files used by the in-app updater
+
+## Uninstall
+
+Open **Settings → Apps → Installed apps**, find **IslandDeck** and uninstall it.
+Optionally delete `%AppData%\IslandDeck` to remove saved settings.
+
+## Notes and troubleshooting
+
+- If the taskbar stays translucent after quitting, restart Windows Explorer from Task Manager.
+- For the smoothest live wallpaper, use an H.264 mp4. Very heavy 4K videos can load the system.
+- The island reads the system media session, so it works with most players that report what they play.
